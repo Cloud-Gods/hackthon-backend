@@ -1,0 +1,3 @@
+env_fastapi_test
+*.env
+__pycache__

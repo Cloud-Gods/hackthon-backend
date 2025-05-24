@@ -30,7 +30,7 @@ class CreateDB:
             # Crear tabla de usuarios
             cursor.execute("""
                 Use  BotTech;
-                CREATE TABLE IF NOT EXISTS Documentos (
+                CREATE TABLE IF NOT EXISTS Proceso (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     nombre VARCHAR(255) NOT NULL,
                     tipo VARCHAR(50) NOT NULL,

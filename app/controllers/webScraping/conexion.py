@@ -4,6 +4,7 @@ import sys
 sys.path.append("c:/Users/yeiso/OneDrive/Escritorio/Proyecto/TalentoTech/Hackathon/hackthon-backend")
 from app.models.logger import Logger
 from app.controllers.IA.conexionIA import ConexionIA
+from app.utils.utils import Utils
 
 #Clase para manejar la conexicon con la pagina web
 class ConexionPagina:
@@ -95,12 +96,18 @@ class ConexionPagina:
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
+
                 #Una vez que tenfo la repsiesta llamo a la ia para pasarle los datos 
                 ia = ConexionIA()
                 #Llamo a la funcion de clasificar datos
-                clasificacion = ia.clasificar_datos(response.json())
-                self.log.info(f"Clasificacion de la IA: {clasificacion}")
-                return clasificacion
+                clasificacion = ia.clasificar_actuacionesList(response.json())
+                
+                #Limpio la respuesta de la IA
+                utils = Utils()
+                clasificacionJson = utils.limpiar_y_parsear_respuesta(clasificacion)
+
+                self.log.info(f"Clasificacion de la IA: {(clasificacionJson)}")
+                return clasificacionJson
 
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
@@ -109,6 +116,13 @@ class ConexionPagina:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
 
 
-ConexionPagina().consultar_actuacionesProcesoList(
-    153705882
+ConexionPagina().consultar_numeroRadicado(
+    parametros = {
+    "Numero": "05001418900820250032700", 
+    "SoloActivos": "false",             
+    "pagina": 1                          
+}
+)
+ConexionPagina().consultar_detalleProceso(
+    proceso = "198167821"
 )

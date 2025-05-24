@@ -8,18 +8,28 @@ from app.models.logger import Logger
 class ConexionIA:
     def __init__(self):
         self.api_key = "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"
-        self.model = "gpt-3.5-turbo"
         self.log = Logger("logs/ConexionIA.log").get_logger()
         self.openai = openai.api_key = self.api_key
     
 
     #Funcion para recibir los datos y clasificarlos
-    def clasificar_datos(self, datos):
+    def clasificar_actuacionesList(self, datos):
         try:
             prompt = """
                 Eres un asistente jurídico. A continuación tienes una lista de eventos judiciales (actuaciones). Para cada actuación, clasifícala según su nivel de urgencia para el abogado defensor y proporciona un resumen breve.
 
                 Clasificación: Alta, Media, Baja o Nula.
+
+                Alta: Actuaciones que requieren atención inmediata o que tienen un impacto significativo en el caso.
+                Media: Actuaciones que son importantes pero no urgentes.
+                Baja: Actuaciones que son de bajo impacto o que pueden esperar.
+                Nula: Actuaciones que no tienen relevancia o que no requieren atención.
+
+                LAs actuaciones las vas a colocar con numoer siendo 1 la de menor urgencia y 4 la de mayor urgencia.
+
+                Pero en caso de que no haya actuaciones, devuelve un mensaje indicando que no hay actuaciones.
+                Resumen: Un breve resumen de la actuación.
+
 
                 Devuelve la información en este formato y las de mayor urgencia primero, y en un formato json con estas estructuras:
 
@@ -49,4 +59,8 @@ class ConexionIA:
             return response.choices[0].message.content.strip()
         except Exception as ex:
             self.log.error(f"Error al clasificar los datos: {ex}")
-            return None
+            return {
+                "error": "Error al clasificar los datos"
+            }
+    
+    #Funcion para mirar por encima que trata el proceso

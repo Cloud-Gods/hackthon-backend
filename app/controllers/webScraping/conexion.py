@@ -32,8 +32,19 @@ class ConexionPagina:
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
-                self.log.info(f"Proceso encontrado: {response.json()}")
-                return response.json()
+                data = response.json()
+
+                #Extraigo el tipo de proceso
+                idProceso = data['procesos'][0]['idProceso']
+                #Y se lo mando para que me devuleva la clase del proceso
+                clase_proceso = self.obtener_tipoProceso(idProceso)
+                #Ahora remplazo el tipo de proceso en la respuesta
+                data['parametros']['claseProceso'] = clase_proceso.get('clase_proceso')
+
+                self.log.info(f"datos: {data}")
+
+                
+                return data
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
                 self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
@@ -50,6 +61,14 @@ class ConexionPagina:
 
             data = response.json()
             procesos = data.get("procesos", [])
+
+            # Para cada proceso, obtener y añadir la clase de proceso
+            for proceso in procesos:
+                idProceso = proceso.get('idProceso')
+                if idProceso:
+                    clase_proceso = self.obtener_tipoProceso(idProceso)
+                    # Añadir la clase de proceso dentro del proceso
+                    proceso['claseProceso'] = clase_proceso.get('clase_proceso')
 
             paginacion = data.get("paginacion", {})
             total_procesos = paginacion.get("cantidadRegistros", 0)
@@ -101,7 +120,7 @@ class ConexionPagina:
                 ia = ConexionIA()
                 #Llamo a la funcion de clasificar datos
                 clasificacion = ia.clasificar_actuacionesList(response.json())
-                
+
                 #Limpio la respuesta de la IA
                 utils = Utils()
                 clasificacionJson = utils.limpiar_y_parsear_respuesta(clasificacion)
@@ -115,14 +134,36 @@ class ConexionPagina:
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
 
+    #FUncion para obtener la clase del proceso
+    def obtener_tipoProceso(self,proceso):
+        url = f"https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Proceso/Detalle/{proceso}"
+        try:
+            response = requests.get(url, headers=self.headers)
+            #Si la respuesta es exitosa, se devuelve el json
+            if response.status_code == 200:
+                data = response.json()
+                #Extraigo el tipo de proceso
+                tipo_proceso = data.get("tipoProceso","No disponible")
+                #Extraigo la clase del proceso
+                clase_proceso = data.get("claseProceso", "No disponible")
 
-ConexionPagina().consultar_numeroRadicado(
+                return {
+                    "tipo_proceso": tipo_proceso,
+                    "clase_proceso": clase_proceso
+                }
+
+            #En caso de que no sea asi, se devuelve un mensaje de error
+            else:
+                self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
+        except Exception as ex:
+            self.log.error(f"Error al conectar a la pagina web: {ex}")
+
+ConexionPagina().consultar_nombreRazonSocial(
     parametros = {
-    "Numero": "05001418900820250032700", 
-    "SoloActivos": "false",             
-    "pagina": 1                          
-}
-)
-ConexionPagina().consultar_detalleProceso(
-    proceso = "198167821"
+    "nombre": "Falabella",
+    "tipoPersona": "jur",
+    "SoloActivos": "true",
+    "codificacionDespacho": "05001",
+    "pagina": 1
+    }
 )

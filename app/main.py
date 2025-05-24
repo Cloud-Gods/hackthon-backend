@@ -75,7 +75,5 @@ async def get_actuaciones(numero):
 
 
 
-
-
 # Iniciar la aplicación con el siguiente comando:
 # uvicorn app.main:app --reload

@@ -28,15 +28,13 @@ class ConexionIA:
                 LAs actuaciones las vas a colocar con numoer siendo 1 la de menor urgencia y 4 la de mayor urgencia.
 
                 Pero en caso de que no haya actuaciones, devuelve un mensaje indicando que no hay actuaciones.
-                Resumen: Un breve resumen de la actuación.
-
 
                 Devuelve la información en este formato y las de mayor urgencia primero, y en un formato json con estas estructuras:
 
                 [
                     {
                         "actuacion": <número>,
-                        "clasificacion": "Alta" | "Media" | "Baja" | "Nula",
+                        "clasificacion": "Alta"=4 | "Media" = 3 | "Baja" = 2 | "Nula" = 1,
                         "resumen": "<texto resumen>"
                     },
                     ...
@@ -48,7 +46,7 @@ class ConexionIA:
             datos_str = json.dumps(datos, ensure_ascii=False)
 
             response = openai.chat.completions.create(
-                model="gpt-4o",  # También puedes usar gpt-4-turbo o gpt-3.5-turbo
+                model="gpt-3.5-turbo",  # También puedes usar gpt-4-turbo o gpt-3.5-turbo
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": f"Clasifica el siguiente evento judicial: {datos_str}"}

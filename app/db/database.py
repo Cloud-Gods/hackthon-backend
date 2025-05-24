@@ -35,3 +35,14 @@ class ConexionDB:
                 return None
         except Exception as ex:
             self.log.error(f"Error al conectar a la base de datos: {ex}")
+    
+    #Funcion para desconectar la base de datos
+    def desconectar(self, con):
+        try:
+            if con.is_connected():
+                con.close()
+                self.log.info("Desconexión exitosa de la base de datos")
+            else:
+                self.log.error("Error al desconectar de la base de datos")
+        except Exception as ex:
+            self.log.error(f"Error al desconectar de la base de datos: {ex}")

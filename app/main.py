@@ -2,8 +2,12 @@
 
 from fastapi import FastAPI
 from app.routers import auth
+from app.db.createDB import CreateDB
 
 app = FastAPI()
+#Crear la base de datos
+create_db = CreateDB()
+create_db.crear_base_datos()
 
 @app.get("/")
 async def root():

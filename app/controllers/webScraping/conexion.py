@@ -71,13 +71,30 @@ class ConexionPagina:
 
 
     #Funcion para consultar detalle de un proceso
-    def consultar_detalleProceso(self,parametros):
-        self.url = "https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Procesos/Consulta/Detalle"
+    def consultar_detalleProceso(self,proceso):
+        self.url = f"https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Proceso/Detalle/{proceso}"
         try:
-            response = requests.get(self.url,params=parametros, headers=self.headers)
+            response = requests.get(self.url,headers=self.headers)
+            #Si la respuesta es exitosa, se devuelve el json
+            if response.status_code == 200:
+                self.log.info("Conexión exitosa a la página para detalle de un proceso")
+                self.log.info(f"Detalle del proceso encontrado: {response.json()}")
+                return response.json()
+            #En caso de que no sea asi, se devuelve un mensaje de error
+            else:
+                self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
+        except Exception as ex:
+            self.log.error(f"Error al conectar a la pagina web: {ex}")
+    
+    #Funcion para consulrar de actuaciones de un proceso
+    def consultar_actuacionesProcesoList(self,proceso):
+        url = f"https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Proceso/Actuaciones/{proceso}"
+        try:
+            response = requests.get(url, headers=self.headers)
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
+                self.log.info(f"Actuaciones encontradas: {response.json()}")
                 return response.json()
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
@@ -85,12 +102,6 @@ class ConexionPagina:
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
 
-ConexionPagina().consultar_nombreRazonSocial(
-    parametros = {
-    "nombre": "Falabella",
-    "tipoPersona": "jur",               
-    "SoloActivos": "true",
-    "codificacionDespacho": "05001",   
-    "pagina": 1
-    }
+ConexionPagina().consultar_actuacionesProcesoList(
+    proceso="198167821"
 )

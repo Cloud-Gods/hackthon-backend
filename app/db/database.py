@@ -35,5 +35,3 @@ class ConexionDB:
                 return None
         except Exception as ex:
             self.log.error(f"Error al conectar a la base de datos: {ex}")
-
-ConexionDB().conectar()

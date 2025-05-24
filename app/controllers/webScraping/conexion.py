@@ -38,32 +38,37 @@ class ConexionPagina:
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
 
-    #FUncion para consultar por nombre, departamento y ciudad
     def consultar_nombreRazonSocial(self, parametros):
-        url = "https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Procesos/Consulta/NombreRazonSocial"
-        procesos_list = []
+        self.url = "https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Procesos/Consulta/NombreRazonSocial"
         try:
-            response = requests.get(url, params=parametros, headers=self.headers)
+            response = requests.get(self.url, params=parametros, headers=self.headers)
             if response.status_code != 200:
                 self.log.error(f"Error en la página {parametros['pagina']}: {response.status_code}")
-                return []
+                return [], 0
 
             data = response.json()
             procesos = data.get("procesos", [])
-            procesos_list.extend(procesos)
 
-            pagina_actual = data.get("paginacion", {}).get("pagina", 1)
-            total_paginas = data.get("paginacion", {}).get("cantidadPaginas", 1)
+            paginacion = data.get("paginacion", {})
+            total_procesos = paginacion.get("cantidadRegistros", 0)
 
-            print(f"Página {pagina_actual} de {total_paginas} descargada.")
-            self.log.info(f"{procesos_list}")
-            self.log.info(f"Procesos encontrados en esta página: {len(procesos_list)}")
+            self.log.info(f"Procesos encontrados en esta página: {len(procesos)}")
+            self.log.info(f"data: {procesos}")
 
-            return procesos_list
+            resultado = {
+                "total_procesos": total_procesos,
+                "procesos": procesos,
+            }
+
+            return json.dumps(resultado)
 
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
-            return []
+            return {
+                "total_procesos": 0,
+                "procesos": [],
+            }
+
 
     #Funcion para consultar detalle de un proceso
     def consultar_detalleProceso(self,parametros):

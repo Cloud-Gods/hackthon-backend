@@ -2,7 +2,6 @@
 
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
-from app.db.createDB import CreateDB
 from app.controllers.ApiJuridica.conexion import ConexionPagina
 
 app = FastAPI()
@@ -21,10 +20,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-#Crear la base de datos
-create_db = CreateDB()
-create_db.crear_base_datos()
 
 @app.get("/")
 async def root():

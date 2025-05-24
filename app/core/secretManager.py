@@ -1,9 +1,10 @@
-
-#Clase para obtener los secretos de aws
 import boto3
 from botocore.exceptions import ClientError
-
+import sys
+import json
+sys.path.append("c:/Users/yeiso/OneDrive/Escritorio/Proyecto/TalentoTech/Hackathon/hackthon-backend")
 from app.models.logger import Logger
+
 
 #Clase para manejar los secretos de AWS
 class SecretManager:
@@ -30,5 +31,6 @@ class SecretManager:
         except ClientError as ex:
             self.log.error(f"Error al obtener el secreto: {ex}")
 
-        secret = get_secret_value_response['SecretString']
-        return secret
+        secret = json.loads(get_secret_value_response['SecretString'])
+        token= secret["api-TechBot"]
+        return token

@@ -6,3 +6,10 @@
 2025-05-23 22:29:38 - ERROR - Error al conectar a la base de datos: 'utf-8' codec can't decode byte 0xf3 in position 85: invalid continuation byte
 2025-05-23 22:30:05 - ERROR - Error al conectar a la base de datos: 'utf-8' codec can't decode byte 0xf3 in position 85: invalid continuation byte
 2025-05-23 22:30:17 - ERROR - Error al conectar a la base de datos: 'utf-8' codec can't decode byte 0xf3 in position 85: invalid continuation byte
+2025-05-23 22:59:38 - ERROR - Error al crear la tabla de usuarios: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 6
+2025-05-23 22:59:43 - ERROR - Error al crear la tabla de usuarios: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 6
+2025-05-23 23:00:16 - ERROR - Error al crear la tabla de Documentos: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 6
+2025-05-23 23:00:19 - ERROR - Error al crear la tabla de Documentos: 1046 (3D000): No database selected
+2025-05-23 23:01:04 - ERROR - Error al crear la tabla de Documentos: 1046 (3D000): No database selected
+2025-05-23 23:39:45 - ERROR - Error al conectar a la pagina web: 'Logger' object has no attribute 'ingo'
+2025-05-24 00:18:05 - ERROR - Error al conectar a la pagina web: 'ConexionPagina' object has no attribute 'headers'

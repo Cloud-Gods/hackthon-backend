@@ -9,7 +9,7 @@ from app.models.logger import Logger
 class ConexionPagina:
     def __init__(self):
         self.url = "https://consultaprocesos.ramajudicial.gov.co/procesos/Index"
-        self.log = Logger("logs/Conexion.log").get_logger()
+        self.log = Logger("logs/ObtenerDatos.log").get_logger()
         self.headers = {
             "User-Agent": (
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "

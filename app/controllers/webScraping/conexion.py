@@ -39,37 +39,31 @@ class ConexionPagina:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
 
     #FUncion para consultar por nombre, departamento y ciudad
-    def consultar_nombreRazonSocial(self,parametros):
-        self.url = "https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Procesos/Consulta/NombreRazonSocial"
+    def consultar_nombreRazonSocial(self, parametros):
+        url = "https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Procesos/Consulta/NombreRazonSocial"
         procesos_list = []
         try:
-            while True:
-                response = requests.get(self.url, params=parametros, headers=self.headers)
-                if response.status_code != 200:
-                    self.log.error(f"Error en la página {parametros['pagina']}: {response.status_code}")
-                    break
+            response = requests.get(url, params=parametros, headers=self.headers)
+            if response.status_code != 200:
+                self.log.error(f"Error en la página {parametros['pagina']}: {response.status_code}")
+                return []
 
-                data = response.json()
-                procesos = data.get("procesos", [])
-                if not procesos:
-                    break  # No más procesos, salimos del bucle
+            data = response.json()
+            procesos = data.get("procesos", [])
+            procesos_list.extend(procesos)
 
-                procesos_list.extend(procesos)
+            pagina_actual = data.get("paginacion", {}).get("pagina", 1)
+            total_paginas = data.get("paginacion", {}).get("cantidadPaginas", 1)
 
-                # Verifica si hay más páginas
-                total_paginas = data.get("paginacion", {}).get("cantidadPaginas", 1)
-                pagina_actual = data.get("paginacion", {}).get("pagina", 1)
-                
-                print(f"Página {pagina_actual} de {total_paginas} descargada.")
+            print(f"Página {pagina_actual} de {total_paginas} descargada.")
+            self.log.info(f"{procesos_list}")
+            self.log.info(f"Procesos encontrados en esta página: {len(procesos_list)}")
 
-                if pagina_actual >= total_paginas:
-                    self.log.info("Se han descargado todos los procesos disponibles.")
-                    self.log.info(f"Total de procesos encontrados: {len(procesos_list)}")
-                    break
-                else:
-                    parametros["pagina"] += 1
+            return procesos_list
+
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
+            return []
 
     #Funcion para consultar detalle de un proceso
     def consultar_detalleProceso(self,parametros):

@@ -1,9 +1,9 @@
 import requests
-from bs4 import BeautifulSoup
 import json
 import sys
 sys.path.append("c:/Users/yeiso/OneDrive/Escritorio/Proyecto/TalentoTech/Hackathon/hackthon-backend")
 from app.models.logger import Logger
+from app.controllers.IA.conexionIA import ConexionIA
 
 #Clase para manejar la conexicon con la pagina web
 class ConexionPagina:
@@ -31,6 +31,7 @@ class ConexionPagina:
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
+                self.log.info(f"Proceso encontrado: {response.json()}")
                 return response.json()
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
@@ -94,10 +95,20 @@ class ConexionPagina:
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
-                self.log.info(f"Actuaciones encontradas: {response.json()}")
-                return response.json()
+                #Una vez que tenfo la repsiesta llamo a la ia para pasarle los datos 
+                ia = ConexionIA()
+                #Llamo a la funcion de clasificar datos
+                clasificacion = ia.clasificar_datos(response.json())
+                self.log.info(f"Clasificacion de la IA: {clasificacion}")
+                return clasificacion
+
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
                 self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
+
+
+ConexionPagina().consultar_actuacionesProcesoList(
+    153705882
+)

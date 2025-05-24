@@ -32,7 +32,7 @@ class ConexionDB:
             else:
                 self.log.error("Error al conectar a la base de datos")
                 return None
-        except Exception as ex:
+        except Error as ex:
             self.log.error(f"Error al conectar a la base de datos: {ex}")
     
     #Funcion para desconectar la base de datos
@@ -43,5 +43,5 @@ class ConexionDB:
                 self.log.info("Desconexión exitosa de la base de datos")
             else:
                 self.log.error("Error al desconectar de la base de datos")
-        except Exception as ex:
+        except Error as ex:
             self.log.error(f"Error al desconectar de la base de datos: {ex}")

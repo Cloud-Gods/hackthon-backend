@@ -155,3 +155,7 @@ class ConexionPagina:
                 self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
+
+ConexionPagina().consultar_actuacionesProcesoList(
+    proceso="198898631" #Ejemplo de radicado
+)

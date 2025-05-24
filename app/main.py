@@ -3,20 +3,20 @@
 from fastapi import FastAPI, Query
 from fastapi.middleware.cors import CORSMiddleware
 from app.db.createDB import CreateDB
-from app.controllers.webScraping.conexion import ConexionPagina
+from app.controllers.ApiJuridica.conexion import ConexionPagina
 
 app = FastAPI()
 
 # Lista de orígenes permitidos (puedes ajustarlo según tus necesidades)
 origins = [
     "http://localhost:3000",
-    "http://192.168.1.16:3000",  # <- este es el que estás usando
+    "http://192.168.1.16:3000", 
 ]
 
 # Middleware CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,            # Puedes usar ["*"] para permitir todos (no recomendado en producción)
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -32,9 +32,9 @@ async def root():
 
 @app.get("/GET/CaseNumber")
 async def get_radicado(
-       numero: str = Query(..., alias="numero"),          # obligatorio
-    SoloActivos: bool = Query(True, alias="SoloActivos"), # opcional, por defecto True
-    pagina: int = Query(1, alias="pagina")             # opcional, por defecto 1
+    numero: str = Query(..., alias="numero"),         
+    SoloActivos: bool = Query(True, alias="SoloActivos"), 
+    pagina: int = Query(1, alias="pagina")            
 ):
     params = {
         "Numero": numero,

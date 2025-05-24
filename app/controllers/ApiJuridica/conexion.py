@@ -73,13 +73,12 @@ class ConexionPagina:
             paginacion = data.get("paginacion", {})
             total_procesos = paginacion.get("cantidadRegistros", 0)
 
-            self.log.info(f"Procesos encontrados en esta página: {len(procesos)}")
-            self.log.info(f"data: {procesos}")
 
             resultado = {
                 "total_procesos": total_procesos,
                 "procesos": procesos,
             }
+            self.log.info(f"Consulta exitosa: {resultado}")
 
             return json.dumps(resultado)
 
@@ -89,7 +88,6 @@ class ConexionPagina:
                 "total_procesos": 0,
                 "procesos": [],
             }
-
 
     #Funcion para consultar detalle de un proceso
     def consultar_detalleProceso(self,proceso):
@@ -157,13 +155,3 @@ class ConexionPagina:
                 self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
-
-ConexionPagina().consultar_nombreRazonSocial(
-    parametros = {
-    "nombre": "Falabella",
-    "tipoPersona": "jur",
-    "SoloActivos": "true",
-    "codificacionDespacho": "05001",
-    "pagina": 1
-    }
-)

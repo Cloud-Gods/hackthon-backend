@@ -1,16 +1,15 @@
 import openai
 import json
-
+from app.core.secretManager import SecretManager
 from app.models.logger import Logger
 
 
 #Clase para manejar la conexion con la IA
 class ConexionIA:
     def __init__(self):
-        self.api_key = "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"
+        self.api_key = SecretManager().get_secret()
         self.log = Logger("logs/ConexionIA.log").get_logger()
         self.openai = openai.api_key = self.api_key
-    
 
     #Funcion para recibir los datos y clasificarlos
     def clasificar_actuacionesList(self, datos):

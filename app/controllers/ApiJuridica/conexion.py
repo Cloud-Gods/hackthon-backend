@@ -4,6 +4,7 @@ import sys
 sys.path.append("c:/Users/yeiso/OneDrive/Escritorio/Proyecto/TalentoTech/Hackathon/hackthon-backend")
 from app.models.logger import Logger
 from app.controllers.IA.conexionIA import ConexionIA
+from app.utils.utils import Utils
 
 #Clase para manejar la conexicon con la pagina web
 class ConexionPagina:
@@ -31,8 +32,19 @@ class ConexionPagina:
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
-                self.log.info(f"Proceso encontrado: {response.json()}")
-                return response.json()
+                data = response.json()
+
+                #Extraigo el tipo de proceso
+                idProceso = data['procesos'][0]['idProceso']
+                #Y se lo mando para que me devuleva la clase del proceso
+                clase_proceso = self.obtener_tipoProceso(idProceso)
+                #Ahora remplazo el tipo de proceso en la respuesta
+                data['parametros']['claseProceso'] = clase_proceso.get('clase_proceso')
+
+                self.log.info(f"datos: {data}")
+
+                
+                return data
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
                 self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
@@ -50,16 +62,23 @@ class ConexionPagina:
             data = response.json()
             procesos = data.get("procesos", [])
 
+            # Para cada proceso, obtener y añadir la clase de proceso
+            for proceso in procesos:
+                idProceso = proceso.get('idProceso')
+                if idProceso:
+                    clase_proceso = self.obtener_tipoProceso(idProceso)
+                    # Añadir la clase de proceso dentro del proceso
+                    proceso['claseProceso'] = clase_proceso.get('clase_proceso')
+
             paginacion = data.get("paginacion", {})
             total_procesos = paginacion.get("cantidadRegistros", 0)
 
-            self.log.info(f"Procesos encontrados en esta página: {len(procesos)}")
-            self.log.info(f"data: {procesos}")
 
             resultado = {
                 "total_procesos": total_procesos,
                 "procesos": procesos,
             }
+            self.log.info(f"Consulta exitosa: {resultado}")
 
             return json.dumps(resultado)
 
@@ -69,7 +88,6 @@ class ConexionPagina:
                 "total_procesos": 0,
                 "procesos": [],
             }
-
 
     #Funcion para consultar detalle de un proceso
     def consultar_detalleProceso(self,proceso):
@@ -95,12 +113,18 @@ class ConexionPagina:
             #Si la respuesta es exitosa, se devuelve el json
             if response.status_code == 200:
                 self.log.info("Conexión exitosa a la página de consulta por número de radicado")
+
                 #Una vez que tenfo la repsiesta llamo a la ia para pasarle los datos 
                 ia = ConexionIA()
                 #Llamo a la funcion de clasificar datos
-                clasificacion = ia.clasificar_datos(response.json())
-                self.log.info(f"Clasificacion de la IA: {clasificacion}")
-                return clasificacion
+                clasificacion = ia.clasificar_actuacionesList(response.json())
+
+                #Limpio la respuesta de la IA
+                utils = Utils()
+                clasificacionJson = utils.limpiar_y_parsear_respuesta(clasificacion)
+
+                self.log.info(f"Clasificacion de la IA: {(clasificacionJson)}")
+                return clasificacionJson
 
             #En caso de que no sea asi, se devuelve un mensaje de error
             else:
@@ -108,7 +132,26 @@ class ConexionPagina:
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
 
+    #FUncion para obtener la clase del proceso
+    def obtener_tipoProceso(self,proceso):
+        url = f"https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Proceso/Detalle/{proceso}"
+        try:
+            response = requests.get(url, headers=self.headers)
+            #Si la respuesta es exitosa, se devuelve el json
+            if response.status_code == 200:
+                data = response.json()
+                #Extraigo el tipo de proceso
+                tipo_proceso = data.get("tipoProceso","No disponible")
+                #Extraigo la clase del proceso
+                clase_proceso = data.get("claseProceso", "No disponible")
 
-ConexionPagina().consultar_actuacionesProcesoList(
-    153705882
-)
+                return {
+                    "tipo_proceso": tipo_proceso,
+                    "clase_proceso": clase_proceso
+                }
+
+            #En caso de que no sea asi, se devuelve un mensaje de error
+            else:
+                self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
+        except Exception as ex:
+            self.log.error(f"Error al conectar a la pagina web: {ex}")

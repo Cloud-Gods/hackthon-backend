@@ -14,7 +14,7 @@ class ConexionDB:
         self.host = "localhost"
         self.port = 3306
         self.user = "root"
-        self.password = "root"
+        self.password = "Yeisoncano123"
         self.database = "BotTech"
     
     #Metodo para conectar a la base de datos
@@ -45,5 +45,3 @@ class ConexionDB:
                 self.log.error("Error al desconectar de la base de datos")
         except Error as ex:
             self.log.error(f"Error al desconectar de la base de datos: {ex}")
-
-ConexionDB().conectar()

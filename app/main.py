@@ -1,10 +1,26 @@
 # app/main.py
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Query
+from fastapi.middleware.cors import CORSMiddleware
 from app.db.createDB import CreateDB
 from app.controllers.webScraping.conexion import ConexionPagina
 
 app = FastAPI()
+
+# Lista de orígenes permitidos (puedes ajustarlo según tus necesidades)
+origins = [
+    "http://localhost:3000",
+    "http://192.168.1.16:3000",  # <- este es el que estás usando
+]
+
+# Middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,            # Puedes usar ["*"] para permitir todos (no recomendado en producción)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 #Crear la base de datos
 create_db = CreateDB()
@@ -15,14 +31,28 @@ async def root():
     return {"message": "Bienvenido a la API de Login con FastAPI"}
 
 @app.get("/GET/CaseNumber")
-async def get_radicado(params):
+async def get_radicado(
+       numero: str = Query(..., alias="numero"),          # obligatorio
+    SoloActivos: bool = Query(True, alias="SoloActivos"), # opcional, por defecto True
+    pagina: int = Query(1, alias="pagina")             # opcional, por defecto 1
+):
+    params = {
+        "Numero": numero,
+        "SoloActivos": SoloActivos,
+        "pagina": pagina
+    }
     conexion = ConexionPagina()
     resultado = conexion.consultar_numeroRadicado(params)
     
     return resultado
 
 @app.get("/GET/QueryName")
-async def get_nombre(params):
+async def get_nombre():
+    params = {
+    "Nombre": "Juan Perez",              # Nombre completo
+    "SoloActivos": "false",              # (opcional) si quieres ver solo los activos
+    "pagina": 1                          # Página de resultados (paginación)
+}
     conexion = ConexionPagina()
     resultado = conexion.consultar_nombreRazonSocial(params)
     

@@ -45,3 +45,5 @@ class ConexionDB:
                 self.log.error("Error al desconectar de la base de datos")
         except Error as ex:
             self.log.error(f"Error al desconectar de la base de datos: {ex}")
+
+ConexionDB().conectar()

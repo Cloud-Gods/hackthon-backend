@@ -14,7 +14,7 @@ class ConexionDB:
         self.host = "localhost"
         self.port = 3306
         self.user = "root"
-        self.password = "Yeisoncano123"
+        self.password = "root"
         self.database = "BotTech"
     
     #Metodo para conectar a la base de datos

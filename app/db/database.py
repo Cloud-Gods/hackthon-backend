@@ -7,7 +7,6 @@ from app.models.logger import Logger
 
 #Clase para mnejar la base de datos postgres
 class ConexionDB:
-
     #Constructor
     def __init__(self):
         self.log = Logger("logs/Conexion.log").get_logger()

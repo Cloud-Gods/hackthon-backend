@@ -33,11 +33,11 @@ class CreateDB:
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     nombre VARCHAR(255) NOT NULL,
                     tipo VARCHAR(50) NOT NULL,
-                    fecha DATE NOT NULL,
+                    fecha DATE NOT NULL
                 )
             """)
             self.log.info("Tabla de usuarios creada exitosamente")
         except Exception as ex:
-            self.log.error(f"Error al crear la tabla de usuarios: {ex}")
+            self.log.error(f"Error al crear la tabla de Documentos: {ex}")
         finally:
             cursor.close()

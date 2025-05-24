@@ -29,6 +29,7 @@ class CreateDB:
             cursor = self.con.cursor()
             # Crear tabla de usuarios
             cursor.execute("""
+                Use  BotTech;
                 CREATE TABLE IF NOT EXISTS Documentos (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     nombre VARCHAR(255) NOT NULL,

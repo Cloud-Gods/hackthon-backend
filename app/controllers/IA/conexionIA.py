@@ -51,6 +51,7 @@ class ConexionIA:
                     {"role": "user", "content": f"Clasifica el siguiente evento judicial: {datos_str}"}
                 ],
                 temperature=0.3
+
             )
 
             return response.choices[0].message.content.strip()

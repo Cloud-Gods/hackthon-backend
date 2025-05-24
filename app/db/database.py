@@ -25,7 +25,6 @@ class ConexionDB:
                 port=self.port,
                 user=self.user,
                 password=self.password,
-                database=self.database
             )
             if con.is_connected():
                 self.log.info("Conexión exitosa a la base de datos")

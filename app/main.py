@@ -8,10 +8,7 @@ from app.controllers.webScraping.conexion import ConexionPagina
 app = FastAPI()
 
 # Lista de orígenes permitidos (puedes ajustarlo según tus necesidades)
-origins = [
-    "http://localhost:3000",
-    "http://192.168.1.16:3000",  # <- este es el que estás usando
-]
+origins = ["*"]
 
 # Middleware CORS
 app.add_middleware(

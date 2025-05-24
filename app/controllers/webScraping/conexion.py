@@ -85,7 +85,7 @@ class ConexionPagina:
                 self.log.warning(f"Error al conectar a la pagina web: {response.status_code}")
         except Exception as ex:
             self.log.error(f"Error al conectar a la pagina web: {ex}")
-    
+
     #Funcion para consulrar de actuaciones de un proceso
     def consultar_actuacionesProcesoList(self,proceso):
         url = f"https://consultaprocesos.ramajudicial.gov.co:448/api/v2/Proceso/Actuaciones/{proceso}"

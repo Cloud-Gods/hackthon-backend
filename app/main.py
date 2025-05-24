@@ -16,7 +16,6 @@ async def root():
 
 @app.get("/GET/CaseNumber")
 async def get_radicado(params):
-
     conexion = ConexionPagina()
     resultado = conexion.consultar_numeroRadicado(params)
     
@@ -30,16 +29,16 @@ async def get_nombre(params):
     return resultado
 
 @app.get("/GET/CaseDetail")
-async def get_detalle(params):
+async def get_detalle(numero):
     conexion = ConexionPagina()
-    resultado = conexion.consultar_detalleProceso(params)
+    resultado = conexion.consultar_detalleProceso(numero)
     
     return resultado
 
 @app.get("/GET/ActuacionesProcess")
-async def get_actuaciones(params):
+async def get_actuaciones(numero):
     conexion = ConexionPagina()
-    resultado = conexion.consultar_actuacionesProcesoList(params)
+    resultado = conexion.consultar_actuacionesProcesoList(numero)
     
     return resultado
 

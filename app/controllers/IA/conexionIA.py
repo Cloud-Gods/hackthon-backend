@@ -54,7 +54,8 @@ class ConexionIA:
 
             )
 
-            return response.choices[0].message.content.strip()
+            content = response.choices[0].message.content
+            return content.strip() if content is not None else ""
         except Exception as ex:
             self.log.error(f"Error al clasificar los datos: {ex}")
             return {

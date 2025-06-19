@@ -1,3 +1,5 @@
 env_fastapi_test
 *.env
 __pycache__
+*.env_cloudgod
+env_cloudgod

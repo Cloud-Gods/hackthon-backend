@@ -28,3 +28,10 @@
 2025-05-24 10:56:41 - ERROR - Error al conectar a la base de datos: 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
 2025-05-24 10:56:42 - ERROR - Error al conectar a la base de datos: 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
 2025-05-24 10:56:42 - ERROR - Error al crear la base de datos: 'NoneType' object has no attribute 'cursor'
+2025-05-24 12:32:02 - ERROR - Error al conectar a la base de datos: 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+2025-05-24 12:32:02 - ERROR - Error al crear la base de datos: 'NoneType' object has no attribute 'cursor'
+2025-05-24 12:33:05 - ERROR - Error al conectar a la pagina web: Unable to locate credentials
+2025-05-24 12:33:32 - ERROR - Error al conectar a la pagina web: Unable to locate credentials
+2025-05-24 12:33:34 - ERROR - Error al conectar a la pagina web: Unable to locate credentials
+2025-05-24 12:33:40 - ERROR - Error al conectar a la pagina web: Unable to locate credentials
+2025-05-24 12:33:59 - ERROR - Error al conectar a la pagina web: Unable to locate credentials

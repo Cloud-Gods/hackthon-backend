@@ -33,7 +33,7 @@ class ConexionIA:
                 [
                     {
                         "actuacion": <número>,
-                        "clasificacion": "Alta"=4 | "Media" = 3 | "Baja" = 2 | "Nula" = 1,
+                        "clasificacion": "Alta"= 4 | "Media" = 3 | "Baja" = 2 | "Nula" = 1,
                         "resumen": "<texto resumen>"
                     },
                     ...
@@ -45,12 +45,13 @@ class ConexionIA:
             datos_str = json.dumps(datos, ensure_ascii=False)
 
             response = openai.chat.completions.create(
-                model="gpt-3.5-turbo",  # También puedes usar gpt-4-turbo o gpt-3.5-turbo
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": prompt},
                     {"role": "user", "content": f"Clasifica el siguiente evento judicial: {datos_str}"}
                 ],
                 temperature=0.3
+
             )
 
             return response.choices[0].message.content.strip()

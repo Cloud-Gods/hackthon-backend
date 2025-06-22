@@ -2,7 +2,10 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os 
 import sys
+
+import boto3
 from ..utils.singleton import SingletonMeta
+from models import user
 sys.path.append("c:/Users/yeiso/OneDrive/Escritorio/Proyecto/App-Inventario")
 
 #Clase para manejar la creacion de logs y almacenarlos en un archivo de la aplicacion
@@ -40,3 +43,10 @@ class Logger(metaclass=SingletonMeta):
     #Funcion para devolver el logger
     def get_logger(self):
         return self.logger
+    
+
+
+# Example of creating a User instance (uncomment and adjust if needed)
+# admin_user = user.User(username="admin", password="admin123")
+
+# Remove invalid usage of boto3.Response()
